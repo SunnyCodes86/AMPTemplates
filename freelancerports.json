@@ -1,0 +1,25 @@
+[
+    {
+        "Protocol": "UDP",
+        "Port": 2302,
+        "Ref": "GamePort",
+        "Name": "Game Port",
+        "Description": "Freelancer server and DirectPlay traffic",
+        "ChildPorts": [
+            {
+                "Protocol": "UDP",
+                "Offset": 1,
+                "Ref": "DirectPlayPort1",
+                "Name": "DirectPlay Port 1",
+                "Description": "Freelancer DirectPlay traffic"
+            },
+            {
+                "Protocol": "UDP",
+                "Offset": 2,
+                "Ref": "DirectPlayPort2",
+                "Name": "DirectPlay Port 2",
+                "Description": "Freelancer DirectPlay traffic"
+            }
+        ]
+    }
+]

@@ -1,0 +1,8 @@
+[
+    {
+        "UpdateStageName": "Create Freelancer Server Directory",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "CreateDirectory",
+        "UpdateSourceArgs": "{{$FullBaseDir}}EXE"
+    }
+]
