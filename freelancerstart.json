@@ -1,0 +1,10 @@
+[
+    {
+        "UpdateStageName": "Validate Freelancer Files and Accept EULA",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"EXE=\\\"{{$FullBaseDir}}game/EXE/FLServer.exe\\\"; EULA=\\\"{{$FullBaseDir}}game/EBUEula.dll\\\"; if [ ! -f \\\"$EXE\\\" ]; then echo \\\"Freelancer server files are missing: $EXE\\\" >&2; exit 1; fi; if [ ! -f \\\"$EULA\\\" ]; then echo \\\"Freelancer EULA library is missing: $EULA\\\" >&2; exit 1; fi; B=$(od -An -tx1 -j $((0x217d)) -N 1 \\\"$EULA\\\" | tr -d '[:space:]'); case \\\"$B\\\" in 00) printf '\\\\001' | dd of=\\\"$EULA\\\" bs=1 seek=$((0x217d)) conv=notrunc status=none || exit 1 ;; 01) : ;; *) echo \\\"Unexpected EBUEula.dll byte at 0x217D: $B\\\" >&2; exit 1 ;; esac\"",
+        "SkipOnFailure": false
+    }
+]

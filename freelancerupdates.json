@@ -1,8 +1,33 @@
 [
     {
-        "UpdateStageName": "Create Freelancer Server Directory",
+        "UpdateStageName": "Create Freelancer Game Directory",
         "UpdateSourcePlatform": "All",
         "UpdateSource": "CreateDirectory",
-        "UpdateSourceArgs": "{{$FullBaseDir}}EXE"
+        "UpdateSourceArgs": "{{$FullBaseDir}}game/EXE",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Initialise Wine Prefix",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"export WINEPREFIX=\\\"{{$FullRootDir}}.wine\\\"; unset WINEARCH; export WINEDLLOVERRIDES=\\\"mscoree,mshtml=\\\"; export WINEDEBUG=-all; if ! grep -q 'Services\\\\\\\\RpcSs' \\\"$WINEPREFIX/system.reg\\\" 2>/dev/null; then timeout 5s wineserver -k >/dev/null 2>&1 || true; rm -rf \\\"$WINEPREFIX\\\"; /usr/bin/xvfb-run -a wineboot -i || exit $?; timeout 10s wineserver -k >/dev/null 2>&1 || true; fi\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Install Freelancer Wine Dependencies",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"export WINEPREFIX=\\\"{{$FullRootDir}}.wine\\\"; unset WINEARCH; export WINEDLLOVERRIDES=\\\"mscoree,mshtml=\\\"; export WINEDEBUG=-all; if [ ! -f \\\"$WINEPREFIX/.freelancer-deps-ready\\\" ]; then cd \\\"{{$FullRootDir}}\\\" || exit 1; if [ ! -x ./winetricks ]; then wget -q https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -O winetricks && chmod +x winetricks || exit 1; fi; /usr/bin/xvfb-run -a ./winetricks -q directplay vcrun6sp6 riched30 || exit 1; timeout 10s wineserver -k >/dev/null 2>&1 || true; touch \\\"$WINEPREFIX/.freelancer-deps-ready\\\"; fi\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Seed Freelancer Server Configuration",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"export WINEPREFIX=\\\"{{$FullRootDir}}.wine\\\"; CFG=\\\"$WINEPREFIX/drive_c/users/amp/Documents/My Games/Freelancer/Accts/MultiPlayer/FLServer.cfg\\\"; if [ ! -f \\\"$CFG\\\" ]; then mkdir -p \\\"$(dirname \\\"$CFG\\\")\\\" || exit 1; printf '%s' 'AwAAAEwAQQBOAF8AUwBlAHIAdgBlAHIAXwB0AGUAcwB0AAAAuO4ZAKvnEnYDAAAAUEBfAAAAAADt5xJ2cEJfAAEAAAB0QnQAZQBzAHQAAAAAAAAAAAB0QF8AgEJfAAAAAAB0Ql8AWH9fAAAAAAAc8xkAt7wSdgMAAAAAAAAAAAAAAPDm6QDKvBJ2Lx0B/ShuZACgMAAA4BxjAPDm6QABAAAA4BxjAFA/XwDQ8xkALx0B/QAAAAAvHf3//////6ROAAAB/QEEQAi8AAAAAAAvHf3//////6ROAAAB/QEEQAi8AAAAAADiCigAzau63DCI63c1AQAA4gooACTwGQDKiWR3DQAAAAsAAAACAAAAAgAAAAAAAAAFAAAACwAAAJABAAAAAAAAYAAAAGAAAAAgACIhgQAgAAAAACEAAAAALAMAAAEBAAAaAAAAZAABAAAABQAAAAUAAABcQl8AAACAPWDuGQAY6RJ2AAABAQYAAAAB' | base64 -d > \\\"$CFG\\\" || exit 1; fi\"",
+        "SkipOnFailure": false
     }
 ]
