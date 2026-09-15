@@ -1,10 +1,10 @@
 [
     {
-        "UpdateStageName": "Validate Freelancer Files and Accept EULA",
+        "UpdateStageName": "Validate Freelancer Files and Handle EULA",
         "UpdateSourcePlatform": "Linux",
         "UpdateSource": "Executable",
         "UpdateSourceData": "/bin/bash",
-        "UpdateSourceArgs": "-c \"EXE=\\\"{{$FullBaseDir}}game/EXE/FLServer.exe\\\"; EULA=\\\"{{$FullBaseDir}}game/EBUEula.dll\\\"; if [ ! -f \\\"$EXE\\\" ]; then echo \\\"Freelancer server files are missing: $EXE\\\" >&2; exit 1; fi; if [ ! -f \\\"$EULA\\\" ]; then echo \\\"Freelancer EULA library is missing: $EULA\\\" >&2; exit 1; fi; B=$(od -An -tx1 -j $((0x217d)) -N 1 \\\"$EULA\\\" | tr -d '[:space:]'); case \\\"$B\\\" in 00) printf '\\\\001' | dd of=\\\"$EULA\\\" bs=1 seek=$((0x217d)) conv=notrunc status=none || exit 1 ;; 01) : ;; *) echo \\\"Unexpected EBUEula.dll byte at 0x217D: $B\\\" >&2; exit 1 ;; esac\"",
+        "UpdateSourceArgs": "-c \"BASE=\\\"{{$FullBaseDir}}game\\\"; EXE=\\\"$BASE/EXE/FLServer.exe\\\"; if [ ! -f \\\"$EXE\\\" ]; then echo \\\"Freelancer server files are missing: $EXE\\\" >&2; exit 1; fi; EULA=$(find \\\"$BASE\\\" -maxdepth 2 -type f -iname 'ebueula.dll' -print -quit 2>/dev/null); if [ -z \\\"$EULA\\\" ]; then echo \\\"No EBUEula.dll found - skipping EULA patch\\\"; exit 0; fi; HASH=$(sha256sum \\\"$EULA\\\" | awk '{print $1}'); if [ \\\"$HASH\\\" = \\\"9887a4ef2fa49009fe593b0a6483acd742424621fd79593067b1499ebc53aa01\\\" ]; then B=$(od -An -tx1 -j $((0x217d)) -N 1 \\\"$EULA\\\" | tr -d '[:space:]'); if [ \\\"$B\\\" != \\\"00\\\" ]; then echo \\\"Unexpected vanilla EBUEula.dll byte at 0x217D: $B\\\" >&2; exit 1; fi; printf '\\\\001' | dd of=\\\"$EULA\\\" bs=1 seek=$((0x217d)) conv=notrunc status=none || exit 1; echo \\\"Patched vanilla EBUEula.dll: $EULA\\\"; else echo \\\"Non-vanilla or already patched EBUEula.dll detected ($HASH) - leaving unchanged: $EULA\\\"; fi\"",
         "SkipOnFailure": false
     }
 ]
