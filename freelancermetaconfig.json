@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "ConfigFile": "freelancer-server.ini",
+    "ConfigType": "kvp",
+    "ConfigFormat": "{0}={1}",
+    "ConfigFormatRegex": "^(?<key>[^=]+)=(?<value>.*)$",
+    "Subsections": [
+      {
+        "Heading": "$root",
+        "SettingMappings": {
+          "ServerName": "ServerName",
+          "ServerDescription": "ServerDescription",
+          "ServerPassword": "ServerPassword",
+          "MaxPlayers": "$MaxUsers",
+          "AllowNewPlayers": "AllowNewPlayers",
+          "InternetServer": "InternetServer",
+          "AllowPvP": "AllowPvP"
+        }
+      }
+    ]
+  }
+]
