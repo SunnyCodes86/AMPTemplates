@@ -8,8 +8,8 @@
     "FieldName": "ServerName",
     "InputType": "text",
     "ParamFieldName": "ServerName",
-    "DefaultValue": "LAN_Server_test",
-    "Placeholder": "LAN_Server_test",
+    "DefaultValue": "Freelancer Server",
+    "Placeholder": "Freelancer Server",
     "EnumValues": {}
   },
   {
@@ -21,8 +21,9 @@
     "FieldName": "ServerDescription",
     "InputType": "text",
     "ParamFieldName": "ServerDescription",
-    "DefaultValue": "test",
-    "EnumValues": {}
+    "DefaultValue": "Freelancer Dedicated Server",
+    "EnumValues": {},
+    "Placeholder": "Freelancer Dedicated Server"
   },
   {
     "DisplayName": "Server Password",
@@ -47,8 +48,8 @@
     "MinValue": "1",
     "MaxValue": "128",
     "ParamFieldName": "MaxPlayers",
-    "DefaultValue": "6",
-    "Placeholder": "6",
+    "DefaultValue": "16",
+    "Placeholder": "16",
     "Suffix": "players",
     "EnumValues": {}
   },
@@ -76,7 +77,7 @@
     "FieldName": "InternetServer",
     "InputType": "checkbox",
     "ParamFieldName": "InternetServer",
-    "DefaultValue": "1",
+    "DefaultValue": "0",
     "EnumValues": {
       "False": "0",
       "True": "1"
